@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קודקס - מונחון ישראלי למשחקי תפקידים</title>
+    
+    <link rel="icon" type="image/png" href="icon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Alef', Inter, sans-serif; direction: rtl; text-align: right; }
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-900 flex flex-col min-h-screen">
+
+    <!-- נאב-בר -->
+    <nav class="bg-stone-200 shadow-md border-b-4 border-amber-900 sticky top-0 z-50 w-full">
+        <div class="max-w-[1350px] mx-auto px-4 py-3 flex items-center justify-between gap-2 md:gap-4">
+            
+            <!-- צד ימין: לוגו וכותרת לחיצים (מוביל לדף הבית) -->
+            <a href="index.html" class="flex items-center gap-2 md:gap-4 shrink-0 hover:opacity-80 transition-opacity" title="חזרה לדף הבית">
+                <div class="hidden md:block">
+                    <img src="icon.png" alt="סמל קודקס" class="h-8 w-8 object-contain">
+                </div>
+                <h1 class="text-xl md:text-2xl font-extrabold text-amber-900 hidden lg:block whitespace-nowrap">קודקס</h1>
+            </a>
+            
+            <!-- צד שמאל: כפתור מילון ותיבת חיפוש צמודים -->
+            <div class="flex items-center gap-2 md:gap-4 flex-1 justify-end">
+                <a href="dictionary.html" class="inline-block px-3 py-2 bg-amber-900 hover:bg-amber-700 text-white text-sm md:text-base font-bold rounded-sm shadow-md transition duration-300 whitespace-nowrap">המילון המלא</a>
+                
+                <div class="relative w-full max-w-[140px] sm:max-w-xs">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-amber-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input type="text" id="nav-search-input" placeholder="חיפוש..." class="block w-full pl-3 pr-10 py-2 border-2 border-amber-900 rounded-sm leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-700 sm:text-sm transition-colors">
+                    <div id="nav-search-results" class="absolute z-50 mt-1 w-full bg-white shadow-xl max-h-72 rounded-sm border border-amber-200 overflow-auto hidden"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- אזור התוכן המרכזי -->
+    <main class="flex-grow w-full max-w-[1350px] mx-auto px-4 py-6 md:py-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8 pt-4">
+                <div class="flex justify-center mb-6">
+                    <img src="logo.png" alt="לוגו קודקס" class="h-24 md:h-32 object-contain drop-shadow-md">
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-amber-900 mb-4">קודקס מונחי משחקי תפקידים</h1>
+            </div>
+
+            <section class="mb-10 p-6 md:p-8 bg-white border-2 border-amber-700 rounded-sm shadow-lg text-lg">
+                <p class="text-gray-800 leading-relaxed mb-4">
+                    קודקס מונחי משחקי תפקידים הוא פרויקט קהילתי שמטרתו ליצור מילון מקיף ומדויק למונחים המרכזיים בעולם משחקי התפקידים השולחניים. הקודקס מתמקד בתרגום, יצירת מונחים עבריים תקניים וניסוח הגדרות קצרות וברורות שישמשו את קהילת השחקנים והמנחים בישראל.
+                </p>
+                <p class="text-gray-800 leading-relaxed mb-6">
+                    המילון מכסה מונחים מכניקה, דמויות, עלילה וציוד, ומספק לכל מונח פירוש מפורט, מקור באנגלית ודוגמאות שימוש נפוצות. הקודקס הוא משאב חי ודינמי, ונתונים חדשים יתווספו אליו מעת לעת.
+                </p>
+                <div class="bg-stone-100 p-4 rounded text-center border border-amber-200">
+                    <p class="text-gray-900 font-semibold text-xl">
+                        נכון לעכשיו, הקודקס כולל <span id="term-count" class="text-red-700 text-3xl font-extrabold">...</span> מונחים.
+                    </p>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-amber-900 mb-4 border-b border-amber-900 pb-2">חיפוש מהיר</h2>
+                <div class="relative">
+                    <input type="text" id="main-search-input" placeholder="חפש מילה בעברית או באנגלית (לדוגמה: מנחה, DM, חוכמה)..." class="w-full p-4 border-2 border-amber-900 bg-white text-gray-900 placeholder-gray-500 text-lg focus:outline-none focus:ring-4 focus:ring-amber-700 transition duration-150 rounded-sm shadow-inner">
+                </div>
+                <p id="main-search-status" class="text-sm text-gray-600 mt-2 font-medium">הקלד מילה בעברית או באנגלית כדי לחפש בקודקס.</p>
+            </section>
+
+            <section id="main-results-container" class="grid grid-cols-1 mb-10 shadow-md rounded-sm overflow-hidden"></section>
+        </div>
+    </main>
+
+    <!-- פוטר -->
+    <footer class="mt-auto pt-6 pb-6 border-t-4 border-amber-900 bg-stone-200 text-center text-sm w-full shadow-sm">
+        <div class="max-w-[1350px] mx-auto space-y-2 px-4">
+            <p class="text-amber-900 font-medium">מנוהל ע"י <a href="https://rrpg.top" target="_blank" class="font-bold text-amber-700 hover:text-red-800 underline transition">גלגול - משחקי תפקידים למען הקהילה</a></p>
+            <p class="text-amber-900 font-medium">פותח ע"י <a href="https://lp.reuven.click" target="_blank" class="font-bold text-amber-700 hover:text-red-800 underline transition">ראובן מנדלוביץ'</a></p>
+        </div>
+    </footer>
+
+    <!-- טעינת סקריפטים ולוגיקה ספציפית לדף הבית -->
+    <script src="term-search.js"></script>
+    <script>
+        window.onload = async function () {
+            // initApp מחזיר true אם terms.json נטען בהצלחה דרך הקובץ החיצוני
+            const success = await initApp();
+            
+            const termCountElement = document.getElementById('term-count');
+            const mainSearchInput = document.getElementById('main-search-input');
+            const mainResultsContainer = document.getElementById('main-results-container');
+            const mainSearchStatus = document.getElementById('main-search-status');
+
+            if (success) {
+                termCountElement.textContent = dictionaryData.length;
+                
+                mainSearchInput.addEventListener('input', (e) => {
+                    const results = performSearch(e.target.value).slice(0, 5); // מציג רק עד 5 תוצאות בדף הבית
+                    if (e.target.value.trim().length < 2) {
+                        mainResultsContainer.innerHTML = '';
+                        mainSearchStatus.textContent = 'הקלד לפחות 2 אותיות כדי להתחיל בחיפוש...';
+                        return;
+                    }
+                    mainResultsContainer.innerHTML = results.map(createListCardHtml).join('');
+                    mainSearchStatus.textContent = results.length === 0 
+                        ? `לא נמצאו מונחים מתאימים לחיפוש "${e.target.value}".` 
+                        : `נמצאו תוצאות. מציג את הרלוונטיות ביותר:`;
+                });
+            } else {
+                termCountElement.textContent = 'שגיאה';
+                termCountElement.classList.add('text-red-700');
+                mainSearchStatus.innerHTML = '<span class="text-red-700 font-bold">❌ שגיאה קריטית: נתוני המילון (terms.json) לא נטענו.</span>';
+                mainSearchInput.disabled = true;
+            }
+        };
+    </script>
+</body>
+</html>
