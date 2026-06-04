@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מונח - קודקס מונחי משחקי תפקידים</title>
+    
+    <link rel="icon" type="image/png" href="icon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Alef', Inter, sans-serif; direction: rtl; text-align: right; scroll-behavior: smooth;}
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-900 flex flex-col min-h-screen">
+
+    <!-- נאב-בר -->
+    <nav class="bg-stone-200 shadow-md border-b-4 border-amber-900 sticky top-0 z-50 w-full">
+        <div class="max-w-[1350px] mx-auto px-4 py-3 flex items-center justify-between gap-2 md:gap-4">
+            <a href="index.html" class="flex items-center gap-2 md:gap-4 shrink-0 hover:opacity-80 transition-opacity" title="חזרה לדף הבית">
+                <div class="hidden md:block">
+                    <img src="icon.png" alt="סמל קודקס" class="h-8 w-8 object-contain">
+                </div>
+                <h1 class="text-xl md:text-2xl font-extrabold text-amber-900 hidden lg:block whitespace-nowrap">קודקס</h1>
+            </a>
+            
+            <div class="flex items-center gap-2 md:gap-4 flex-1 justify-end">
+                <a href="dictionary.html" class="inline-block px-3 py-2 bg-amber-900 hover:bg-amber-700 text-white text-sm md:text-base font-bold rounded-sm shadow-md transition duration-300 whitespace-nowrap">המילון המלא</a>
+                
+                <div class="relative w-full max-w-[140px] sm:max-w-xs">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-amber-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input type="text" id="nav-search-input" placeholder="חיפוש..." class="block w-full pl-3 pr-10 py-2 border-2 border-amber-900 rounded-sm leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-700 sm:text-sm transition-colors">
+                    <div id="nav-search-results" class="absolute z-50 mt-1 w-full bg-white shadow-xl max-h-72 rounded-sm border border-amber-200 overflow-auto hidden"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- אזור התוכן המרכזי -->
+    <main class="flex-grow w-full max-w-[1350px] mx-auto px-4 py-6 md:py-10">
+        <div class="max-w-4xl mx-auto">
+            <button onclick="window.history.back()" class="inline-flex items-center text-amber-900 font-bold hover:text-red-800 mb-6 transition group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+                חזרה אחורה
+            </button>
+            
+            <article id="term-content-container" class="bg-stone-50 p-6 md:p-10 border-2 border-amber-900 rounded-sm shadow-xl relative overflow-hidden">
+                <div class="text-center text-gray-500 mt-10">טוען נתונים...</div>
+            </article>
+        </div>
+    </main>
+
+    <!-- פוטר -->
+    <footer class="mt-auto pt-6 pb-6 border-t-4 border-amber-900 bg-stone-200 text-center text-sm w-full shadow-sm">
+        <div class="max-w-[1350px] mx-auto space-y-2 px-4">
+            <p class="text-amber-900 font-medium">מנוהל ע"י <a href="https://rrpg.top" target="_blank" class="font-bold text-amber-700 hover:text-red-800 underline transition">גלגול - משחקי תפקידים למען הקהילה</a></p>
+            <p class="text-amber-900 font-medium">פותח ע"י <a href="https://lp.reuven.click" target="_blank" class="font-bold text-amber-700 hover:text-red-800 underline transition">ראובן מנדלוביץ'</a></p>
+        </div>
+    </footer>
+
+    <!-- סקריפטים ספציפיים לדף המילה -->
+    <script src="term-search.js"></script>
+    <script>
+        function renderTermPage(word) {
+            const container = document.getElementById('term-content-container');
+            
+            // עדכון כותרת הדף למטרות SEO והיסטוריה
+            document.title = `${word.word} - קודקס הרר"פ`;
+
+            const tags = word.tags || [];
+            const tagsHtml = tags.map(tag =>
+                `<span class="inline-block bg-red-900/10 text-red-700 text-sm font-medium px-3 py-1 rounded-sm ml-2 mb-2 border border-red-900/50">${tag}</span>`
+            ).join('');
+
+            let fullDetailsTable = [];
+            if (word.hebrewDetails) {
+                fullDetailsTable = Object.keys(HEBREW_DETAILS_MAP)
+                    .map(key => ({ label: HEBREW_DETAILS_MAP[key], value: word.hebrewDetails[key] }))
+                    .filter(detail => detail.value && detail.value.trim() !== '' && detail.value.trim() !== 'אין' && detail.value.trim() !== 'ריק');
+            }
+
+            const hebrewDetailsHtml = fullDetailsTable.length > 0 ? `
+                <h3 class="text-xl font-semibold mt-4 mb-2 border-b border-amber-900 pb-1 text-amber-900">פירוט לשוני:</h3>
+                <table class="w-full text-base text-gray-700 mb-6">
+                    <tbody>
+                        ${fullDetailsTable.map(d => `
+                            <tr class="border-b border-stone-300 last:border-b-0">
+                                <th class="py-2 pr-0 font-bold w-1/3 text-right text-amber-900">${d.label}:</th>
+                                <td class="py-2 pl-0 font-normal w-2/3 text-right">${d.value}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            ` : '';
+
+            const usagesHtml = (word.usages && word.usages.length > 0) ? `
+                <h3 class="text-xl font-semibold mt-6 mb-2 border-b border-amber-900 pb-1 text-amber-900">שימושים ודוגמאות:</h3>
+                <ul class="list-disc pr-5 space-y-2 text-gray-800 text-lg">
+                    ${word.usages.map(u => `<li>${u}</li>`).join('')}
+                </ul>
+            ` : '';
+
+            let relatedTermsHtml = '';
+            if (word.tags && word.tags.length > 0) {
+                const related = dictionaryData.filter(item => 
+                    item.word !== word.word && item.tags && item.tags.some(tag => word.tags.includes(tag))
+                ).slice(0, 3);
+                
+                if (related.length > 0) {
+                    relatedTermsHtml = `
+                        <div class="mt-10 pt-6 border-t-2 border-stone-200">
+                            <h3 class="text-xl font-bold text-amber-900 mb-4">מונחים קשורים מאותו נושא:</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                ${related.map(r => `
+                                    <a href="term.html#${encodeURIComponent(r.word)}" class="block bg-white p-4 border-2 border-amber-100 rounded-sm hover:border-amber-400 hover:shadow-md transition duration-200">
+                                        <h4 class="font-bold text-amber-900 text-lg mb-1">${r.word}</h4>
+                                        <p class="text-sm text-gray-500 font-bold ltr inline-block w-full" style="direction: ltr; text-align: left;">${r.sourceEn}</p>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            container.innerHTML = `
+                <div class="mb-4 flex flex-wrap gap-y-1">${tagsHtml}</div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-amber-900 mb-2">${word.word}</h1>
+                <p class="text-lg text-gray-600 mb-6">מקור באנגלית: <span class="font-bold text-xl ml-1 ltr inline-block" style="direction: ltr;">${word.sourceEn}</span></p>
+                
+                ${hebrewDetailsHtml}
+                
+                <h3 class="text-xl font-semibold mt-6 mb-2 border-b border-amber-900 pb-1 text-amber-900">פירוש מלא:</h3>
+                <p class="text-xl text-gray-800 leading-relaxed whitespace-pre-line mb-6">${word.definition}</p>
+                
+                ${usagesHtml}
+                ${relatedTermsHtml}
+            `;
+        }
+
+        function loadTermFromHash() {
+            const hash = decodeURIComponent(window.location.hash.substring(1));
+            const container = document.getElementById('term-content-container');
+            
+            if (!hash) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const word = dictionaryData.find(t => t.word === hash);
+            if (word) {
+                renderTermPage(word);
+            } else {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <p class="text-red-700 text-2xl font-bold mb-4">😔 המונח "${hash}" לא נמצא במילון.</p>
+                        <a href="index.html" class="inline-block px-6 py-2 bg-amber-900 text-white font-bold rounded-sm">חזרה לדף הבית</a>
+                    </div>
+                `;
+            }
+        }
+
+        window.onload = async function () {
+            const success = await initApp();
+            if(success) {
+                loadTermFromHash();
+            } else {
+                document.getElementById('term-content-container').innerHTML = '<p class="text-red-700 font-bold text-center">❌ שגיאה קריטית בטעינת הנתונים.</p>';
+            }
+        };
+
+        // האזנה לשינוי Hash (למקרה שהמשתמש לוחץ על מונח קשור מתוך הדף עצמו)
+        window.addEventListener('hashchange', () => {
+            loadTermFromHash();
+            window.scrollTo(0, 0); // גלול חזרה למעלה
+        });
+    </script>
+</body>
+</html>
